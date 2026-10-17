@@ -6,97 +6,98 @@ class ComplexPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Дашборд'),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
-        ],
+        title: const Text('Meditate', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: const LinearGradient(
-                colors: [Colors.indigo, Colors.purple],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Большая карточка
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.amber[400],
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.teal,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text('All', style: TextStyle(color: Colors.white, fontSize: 12)),
+                  ),
+                  const SizedBox(height: 20),
+                  const Row(
+                    children: [
+                      Icon(Icons.brightness_5, size: 60, color: Colors.orange),
+                      Icon(Icons.nightlight_round, size: 60, color: Colors.black),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'A Song of Moon',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Start with the basics', style: TextStyle(color: Colors.black54)),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('Start >', style: TextStyle(color: Colors.black)),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 16),
+            // Сетка карточек (GridView)
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1.2,
               children: [
-                Text('Добро пожаловать!',
-                    style: TextStyle(color: Colors.white70)),
-                SizedBox(height: 6),
-                Text('Ваш прогресс за неделю',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
+                _buildGridCard('The Sleep Hour', '3 Sessions', Colors.orange[300]!),
+                _buildGridCard('Easy on the Mission', '5 minutes', Colors.amber[200]!),
+                _buildGridCard('Relax with Me', '3 Sessions', Colors.blue[300]!),
+                _buildGridCard('Sun and Energy', '8 minutes', Colors.teal[300]!),
               ],
             ),
-          ),
-          const SizedBox(height: 20),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 1.5,
-            children: const [
-              _MetricCard(title: 'Проекты', value: '12', icon: Icons.work),
-              _MetricCard(title: 'Задачи', value: '34', icon: Icons.task_alt),
-              _MetricCard(title: 'Встречи', value: '5', icon: Icons.event),
-              _MetricCard(title: 'Рейтинг', value: '4.8', icon: Icons.star),
-            ],
-          ),
-          const SizedBox(height: 20),
-          const Text('Последние действия',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          ...List.generate(4, (i) {
-            return Card(
-              child: ListTile(
-                leading: CircleAvatar(child: Text('${i + 1}')),
-                title: Text('Действие ${i + 1}'),
-                subtitle: Text('Описание события ${i + 1}'),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-            );
-          }),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
 
-class _MetricCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  const _MetricCard(
-      {required this.title, required this.value, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildGridCard(String title, String subtitle, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(16),
+        color: color,
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(height: 8),
-          Text(value,
-              style:
-                  const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          Text(title, style: const TextStyle(color: Colors.grey)),
+          const Spacer(),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(height: 4),
+          Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.black54)),
         ],
       ),
     );

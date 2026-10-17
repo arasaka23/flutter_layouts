@@ -5,151 +5,194 @@ class ComplexPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Лента'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Все'),
-              Tab(text: 'Популярное'),
-              Tab(text: 'Новое'),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            _FeedTab(popular: false),
-            _FeedTab(popular: true),
-            _FeedTab(popular: false, newest: true),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _showCreateSheet(context),
-          icon: const Icon(Icons.add),
-          label: const Text('Создать'),
-        ),
-      ),
-    );
-  }
-
-  void _showCreateSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (_) => Padding(
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          top: 16,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-        ),
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: SafeArea(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text('Новая запись',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Заголовок',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 12),
-            const TextField(
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Описание',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Сохранить'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FeedTab extends StatelessWidget {
-  final bool popular;
-  final bool newest;
-  const _FeedTab({this.popular = false, this.newest = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return PageView.builder(
-      padEnds: false,
-      controller: PageController(viewportFraction: 0.9),
-      itemCount: 6,
-      itemBuilder: (context, i) {
-        return Padding(
-          padding: const EdgeInsets.all(8),
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    color: Colors.primaries[i % Colors.primaries.length]
-                        .withOpacity(0.3),
-                    child: const Center(
-                      child: Icon(Icons.image, size: 64),
+            // Шапка профиля
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Good Evening', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        Text('Dan Smith', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        popular
-                            ? 'Популярная карточка ${i + 1}'
-                            : newest
-                                ? 'Новая карточка ${i + 1}'
-                                : 'Карточка ${i + 1}',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                  const Icon(Icons.search),
+                  const SizedBox(width: 16),
+                  const Icon(Icons.notifications_none),
+                ],
+              ),
+            ),
+            
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Заголовок "My Weekly Tasks"
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('My Weekly Tasks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text('10 Tasks Pending', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.tune, size: 20),
+                            const SizedBox(width: 12),
+                            const Icon(Icons.add, size: 20),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Горизонтальный список задач
+                    SizedBox(
+                      height: 160,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          _buildTaskCard('Create a Landing Page', 'Mon, 12 July 2022', Colors.purple[50]!),
+                          const SizedBox(width: 12),
+                          _buildTaskCard('Develop a Website', 'Mon, 30 July 2022', Colors.orange[50]!),
+                        ],
                       ),
-                      const SizedBox(height: 6),
-                      const Text(
-                        'Краткое описание записи, которое показывает, как '
-                        'выглядят карточки в ленте на разных табах.',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 24),
+                    // Заголовок "Today's Tasks"
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Today's Tasks", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text('18 Tasks Pending', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Список задач (Карточки)
+                    _buildTodayCard('Design 2 App Screens', 'Crypto Wallet App', true),
+                    const SizedBox(height: 12),
+                    _buildTodayCard('Design Homepage', 'Water Company Website', false),
+                  ],
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // Нижняя панель навигации
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.folder), label: 'Projects'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Calendar'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Messages'),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Members'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTaskCard(String title, String date, Color bgColor) {
+    return Container(
+      width: 160,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                child: const Text('UI/UX', style: TextStyle(fontSize: 10, color: Colors.purple)),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)),
+                child: const Text('High', style: TextStyle(fontSize: 10, color: Colors.white)),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today, size: 12, color: Colors.grey),
+              const SizedBox(width: 4),
+              Text(date, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTodayCard(String title, String subtitle, bool isDone) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 4),
+                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
           ),
-        );
-      },
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isDone ? Colors.blue : Colors.grey[200],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.check, color: isDone ? Colors.white : Colors.grey, size: 16),
+          ),
+        ],
+      ),
     );
   }
 }

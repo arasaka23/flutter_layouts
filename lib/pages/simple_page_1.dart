@@ -6,49 +6,77 @@ class SimplePage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Профиль')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            const CircleAvatar(
-              radius: 56,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=12'),
-            ),
-            const SizedBox(height: 16),
-            Text('Иван Иванов',
-                style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 4),
-            const Text('ivan@example.com',
-                style: TextStyle(color: Colors.grey)),
-            const SizedBox(height: 24),
-            _row(Icons.phone, 'Телефон', '+7 900 000-00-00'),
-            _row(Icons.location_on, 'Город', 'Москва'),
-            _row(Icons.work, 'Профессия', 'Flutter-разработчик'),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () {},
-                child: const Text('Редактировать профиль'),
+      backgroundColor: const Color(0xFF1B9C90), // Зеленый цвет фона как в макете
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Логотип (заглушка)
+              const Icon(Icons.spa, size: 80, color: Colors.white),
+              const SizedBox(height: 20),
+              const Text(
+                'medinow',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              const Text(
+                'Meditate With Us!',
+                style: TextStyle(fontSize: 16, color: Colors.white70),
+              ),
+              const Spacer(),
+              // Кнопка Apple
+              SizedBox(
+                width: 300,
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.apple, color: Colors.black),
+                  label: const Text('Sign in with Apple'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Кнопка Email
+              SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal.shade300,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text('Continue with Email or Phone'),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Кнопка Google
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Continue With Google',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  Widget _row(IconData icon, String title, String value) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: [
-            Icon(icon),
-            const SizedBox(width: 16),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-            const Spacer(),
-            Text(value),
-          ],
-        ),
-      );
 }
